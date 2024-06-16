@@ -97,8 +97,48 @@ if (isset($_POST['approveit'])) {
     } else {
         echo "Product not found.";
     }
+    //get the proudct price 
+    $sql4 = "SELECT * FROM wasteproducts WHERE id = ?";
+    $stmt4 = $conn->prepare($sql4);
+    $stmt4->bind_param("i", $productid);
+    $stmt4->execute();
+    $result4 = $stmt4->get_result();
 
-    $stmt->close();
+    if ($result4->num_rows > 0) {
+        $row4 = $result4->fetch_assoc();
+        $productprice = $row4['wasteproduct_price'];
+
+        //get the user credit score 
+        $sql5 = "SELECT creditscore FROM organizations WHERE id = ?";
+        $stmt5 = $conn->prepare($sql5);
+        $stmt5->bind_param("i", $userid);
+        $stmt5->execute();
+        $result5 = $stmt5->get_result();
+
+        if ($result5->num_rows > 0) {
+            $row5 = $result5->fetch_assoc();
+            $creditscore = $row5['creditscore'];
+
+            //update the credit score 
+            $newcreditscore = $creditscore - $productprice;
+            $sql6 = "UPDATE organizations SET creditscore = ? WHERE id = ?";
+            $stmt6 = $conn->prepare($sql6);
+            $stmt6->bind_param("ii", $newcreditscore, $userid);
+
+            if ($stmt6->execute()) {
+            } else {
+                echo "Error updating record: " . $stmt6->error;
+            }
+
+            $stmt6->close();
+        } else {
+            echo "User not found.";
+        }
+        $stmt7->close();
+    } else {
+        echo "Product not found.";
+    }
+    $stmt4->close();
 }
 if (isset($_POST['rejectit'])) {
     echo "<script>alert('Order Rejected')</script>";
@@ -246,7 +286,7 @@ if (isset($_POST['rejectit'])) {
             echo "</div>";
         }
     } else {
-        
+
         echo "<h1>No orders yet</h1>";
     }
     ?>

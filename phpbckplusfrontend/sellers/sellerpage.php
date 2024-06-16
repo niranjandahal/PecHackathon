@@ -221,11 +221,14 @@ include '../dbconnection.php';
 
                         $images = explode(',', $row["products"]);
 
+                        echo "<div class='image-grid' style='display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px;'>";
+
                         foreach ($images as $image) {
                             $image = trim($image);
-                            echo "<img src='$image' alt='Product Image' style='max-width: 100px; max-height: 100px; margin-right: 8px;'>";
+                            echo "<div class='image-item' style='overflow: hidden; border-radius: 8px;'>
+                    <img src='$image' alt='Product Image' style='width: 100%; height: auto; display: block;'>
+                  </div>";
                         }
-
                         echo "</td></tr>";
                     }
                 } else {

@@ -58,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<script>alert('Product already in your ordered list.')</script>";
             echo "<script>window.location.href='../index.html'</script>";
         }
-
     } else {
         echo "<script>alert('You are not logged in. Please log in to buy products.')</script>";
         echo "<script>window.location.href='../users/index.php'</script>";

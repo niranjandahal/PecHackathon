@@ -5,8 +5,9 @@ session_name('validuser');
 session_start();
 if (isset($_SESSION['userloggedin']) && $_SESSION['userloggedin'] === 'true') {
     $user_name = $_SESSION['user_name'];
-    echo "<script>alert('You are already logged in as $user_name')</script>";
-    echo "<script>window.location.href='../index.html'</script>";
+    echo "<script>window.location.href='./orgprofile.php'</script>";
+    // echo "<script>alert('You are already logged in as $user_name')</script>";
+    // echo "<script>window.location.href='../index.html'</script>";
     exit();
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

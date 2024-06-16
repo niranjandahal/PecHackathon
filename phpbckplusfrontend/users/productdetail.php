@@ -6,6 +6,9 @@ $productdetails = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $productid = $_POST['product_id'];
+
+
+
     $sql = "SELECT * FROM wasteproducts WHERE id = $productid";
     $result = $conn->query($sql);
 
@@ -172,17 +175,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             session_name('validuser');
             session_start();
 
-            if (isset($_SESSION['userloggedin']) && $_SESSION['userloggedin'] === 'true') {
+            //store the produc price
+            $productprice = $productdetails[0]['wasteproduct_price'];
+            //check the user creditscore 
+            $userid = $_SESSION['user_id'];
+            $sql = "SELECT creditscore FROM organizations WHERE id = $userid";
+            $result = $conn->query($sql);
+            $row = $result->fetch_assoc();
+            $creditscore = $row['creditscore'];
+            if ($creditscore < $productprice) {
                 echo ' <div class="modal-content">';
-                echo '<p style="color: green;">Order booked! You may receive a final confirmation through the seller; be patient.</p><br><br>';
-                echo '<p style="color:black;">Seller Name: ' . $productdetails[0]['seller_name'] . '</p><br>';
-                echo '<button class="btn-modal" onclick="buyproducts(' . $productid . ')">OK</button>';
+                echo '<p style="color: red;">You do not have enough credit to buy this product</p><br><br>';
+                echo '<button class="btn-modal" onclick="closeModal(\'buyNowModal\')">OK</button>';
                 echo ' </div>';
             } else {
-                echo ' <div class="modal-content">';
-                echo '<p style="color: green;">You need to login first</p><br><br>';
-                echo '<button class="btn-modal" onclick="window.location.href=\'../index.html\'">OK</button>';
-                echo ' </div>';
+                if (isset($_SESSION['userloggedin']) && $_SESSION['userloggedin'] === 'true') {
+                    echo ' <div class="modal-content">';
+                    echo '<p style="color: green;">Order booked! You may receive a final confirmation through the seller; be patient.</p><br><br>';
+                    echo '<p style="color:black;">Seller Name: ' . $productdetails[0]['seller_name'] . '</p><br>';
+                    echo '<button class="btn-modal" onclick="buyproducts(' . $productid . ')">OK</button>';
+                    echo ' </div>';
+                } else {
+                    echo ' <div class="modal-content">';
+                    echo '<p style="color: green;">You need to login first</p><br><br>';
+                    echo '<button class="btn-modal" onclick="window.location.href=\'../index.html\'">OK</button>';
+                    echo ' </div>';
+                }
             }
             ?>
         </div>

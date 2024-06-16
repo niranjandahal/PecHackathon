@@ -63,6 +63,7 @@ if (isset($_SESSION['userloggedin']) && $_SESSION['userloggedin'] === 'true') {
             gap: 20px;
             justify-content: space-around;
             margin: 20px;
+            item-align: center,
         }
 
         .tittle {
@@ -79,6 +80,7 @@ if (isset($_SESSION['userloggedin']) && $_SESSION['userloggedin'] === 'true') {
             padding: 15px;
             text-align: center;
             background-color: #fff;
+            /* width: 50%; */
             /* Lighter product card background color */
             transition: transform 0.3s ease-in-out;
         }
@@ -89,7 +91,7 @@ if (isset($_SESSION['userloggedin']) && $_SESSION['userloggedin'] === 'true') {
 
         .product-image {
             max-width: 100%;
-            height: auto;
+            height: 300px;
             border-radius: 5px;
             margin-bottom: 10px;
         }
