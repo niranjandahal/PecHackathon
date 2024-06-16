@@ -1,6 +1,7 @@
 <?php
 include "../cors.php";
-session_name('otpsession');
+// session_name('otpsession');
+session_name('validseller');
 session_start();
 include '../dbconnection.php';
 

@@ -1,5 +1,6 @@
 <?php
-session_name('otpsession');
+// session_name('otpsession');
+session_name('validseller');
 session_start();
 if (isset($_SESSION['sentotp']) && $_SESSION['sentotp'] === 'true') {
     header("location: ../otp/verifyotp.php");

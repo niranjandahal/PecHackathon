@@ -1,5 +1,6 @@
 <?php
-session_name('otpsession');
+// session_name('otpsession');
+session_name('validseller');
 session_start();
 session_destroy();
 echo "<script>alert('Redirct to the seller signup page')</script>";

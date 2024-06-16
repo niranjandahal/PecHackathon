@@ -2,6 +2,8 @@
 include '../dbconnection.php';
 include "../cors.php";
 include 'otpfunction.php';
+// session_name('validseller');
+// session_start();
 
 if (isset($_POST['email']) && !empty($_POST['email'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -16,11 +18,11 @@ if (isset($_POST['email']) && !empty($_POST['email'])) {
         echo "<script>window.location.href='../sellers/index.php'</script>";
         exit();
     } else {
-        session_name('otpsession');
-        session_start();
+        // session_name('otpsession');
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_SESSION['sentotp']) && !empty($_SESSION['sentotp'])) {
-                echo "<script> alert('OTP is already sent to your email!'); </script>";
+                // echo "<script> alert('OTP is already sent to your email!'); </script>";
                 echo "<script> window.location.href='verifyotp.php'; </script>";
                 exit();
             }

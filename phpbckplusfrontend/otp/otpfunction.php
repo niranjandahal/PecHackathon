@@ -1,20 +1,19 @@
 <?php
 include "../cors.php";
-session_name('otpsession');
-session_start();
 include '../dbconnection.php';
+session_name('validseller');
+session_start();
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
 function sendotp()
 {
+    echo "<script>alert('sendotp function called')</script>";
     global $conn;
 
     $otp = rand(100000, 999999);
     $_SESSION['otpcode'] = $otp;
-
-    echo "<script>alert('OTP code is $otp')</script>";
 
     $recipientEmail = $_SESSION['signupemail'];
     $recipientName = $_SESSION['signupname'];
@@ -22,16 +21,17 @@ function sendotp()
     $url = 'https://api.elasticemail.com/v2/email/send';
 
     try {
-        echo "<script>alert('Sending otp code to $recipientEmail')</script>";
+        echo "<script>alert('try block')</script>";
+
         $post = array(
-            'from' => 'abdulpetor@gmail.com',
-            'fromName' => 'Wastekon application',
-            'apikey' => '73FF33F4B70CDCEC4A746289526AB2559F1C64B8762630E2A57D741EE2E136215DAF0A5F33027A8EF9EF6558B77707EF',
+            'from' => 'niranjandahal76@gmail.com',
+            'fromName' => 'Ecommerce application',
+            'apikey' => 'E9257D9B087596C2740C61B717789D7E58893C678465729719C4AB9ECDCFD9984655FD3B4E976B3C9072D3DAED50D185',
             'subject' => 'OTP VERIFICATION',
             'to' => "$recipientEmail",
             'bodyHtml' => "<h2> Hello, $recipientName Your OTP code is : $otp </h2>",
             'bodyText' => 'from the team wastemanagement',
-            'isTransactional' => false
+            'isTransactional' => true
         );
         $ch = curl_init();
         curl_setopt_array($ch, array(
@@ -40,18 +40,17 @@ function sendotp()
             CURLOPT_POSTFIELDS => $post,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER => false,
-            CURLOPT_SSL_VERIFYPEER => false
+            CURLOPT_SSL_VERIFYPEER => true
         ));
         $result = curl_exec($ch);
         curl_close($ch);
         $_SESSION['sentotp'] = 'true';
         echo "<script>alert('An otp code was sent check spam folder $recipientEmail')</script>";
-        echo '<script>window.location.href="verifyotp.php"</script>';
+        // echo '<script>window.location.href="verifyotp.php"</script>';
 
         exit();
     } catch (Exception $ex) {
         echo $ex->getMessage();
-        echo "<script>alert('An error occured while sending otp code')</script>";
     }
 }
 
@@ -65,11 +64,11 @@ function verifyotp()
     $otpcode = $_SESSION['otpcode'];
     if ($enteredOTP == $otpcode) {
         echo '<script>alert("OTP verified successfully")</script>';
-        echo '<script>window.location.href="../sellers/sellersignup.php"</script>';
+        // echo '<script>window.location.href="../sellers/sellersignup.php"</script>';
 
         exit();
     } else {
         echo "<script>alert('Wrong otp code $otpcode check spam folder for $otpemail')</script>";
-        echo '<script>window.location.href="verifyotp.php"</script>';
+        // echo '<script>window.location.href="verifyotp.php"</script>';
     }
 }

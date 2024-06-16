@@ -165,7 +165,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo '<p>No product found</p>';
         }
         ?>
-        <!-- notification implementaion -->
+
+
         <div class="notification" id="cartNotification"></div>
         <!-- Buy Now modal -->
         <div class="modal" id="buyNowModal">
@@ -175,36 +176,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             session_name('validuser');
             session_start();
 
-            //store the produc price
-            $productprice = $productdetails[0]['wasteproduct_price'];
-            //check the user creditscore 
-            $userid = $_SESSION['user_id'];
-            $sql = "SELECT creditscore FROM organizations WHERE id = $userid";
-            $result = $conn->query($sql);
-            $row = $result->fetch_assoc();
-            $creditscore = $row['creditscore'];
-            if ($creditscore < $productprice) {
-                echo ' <div class="modal-content">';
-                echo '<p style="color: red;">You do not have enough credit to buy this product</p><br><br>';
-                echo '<button class="btn-modal" onclick="closeModal(\'buyNowModal\')">OK</button>';
-                echo ' </div>';
-            } else {
-                if (isset($_SESSION['userloggedin']) && $_SESSION['userloggedin'] === 'true') {
+            $product_price = $productdetails[0]['wasteproduct_price'];
+
+            if (isset($_SESSION['userloggedin']) && $_SESSION['userloggedin'] === 'true') {
+                $useridfromsess = $_SESSION['user_id'];
+
+                $sql10 = "SELECT creditscore FROM organizations WHERE id = $useridfromsess";
+                $result = $conn->query($sql10);
+
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $creditscoreorg = $row['creditscore'];
+                    // Now $creditscore holds the user's credit score
+                } else {
+                    // Handle the case where no result is found
+                    echo '<p>Error: Unable to fetch credit score.</p>';
+                }
+
+                if ($creditscoreorg >= $product_price) {
+
+
                     echo ' <div class="modal-content">';
                     echo '<p style="color: green;">Order booked! You may receive a final confirmation through the seller; be patient.</p><br><br>';
                     echo '<p style="color:black;">Seller Name: ' . $productdetails[0]['seller_name'] . '</p><br>';
                     echo '<button class="btn-modal" onclick="buyproducts(' . $productid . ')">OK</button>';
                     echo ' </div>';
                 } else {
-                    echo ' <div class="modal-content">';
-                    echo '<p style="color: green;">You need to login first</p><br><br>';
-                    echo '<button class="btn-modal" onclick="window.location.href=\'../index.html\'">OK</button>';
-                    echo ' </div>';
+                    //error
+                    echo '<div class="modal-content">';
+                    echo '<p style="color: red; font-weight: bold;">Error: Insufficient credit score to purchase this product.</p>';
+                    echo '<p style="color:black;">Your current credit score: ' . $creditscoreorg . '</p><br>';
+                    echo '<p style="color:black;">Required credit score: ' . $product_price . '</p><br>';
+                    echo '<button class="btn-modal" onclick="closeModal(\'buyNowModal\')">OK</button>';
+                    echo '</div>';
                 }
+            } else {
+                echo ' <div class="modal-content">';
+                echo '<p style="color: green;">You need to login first</p><br><br>';
+                echo '<button class="btn-modal" onclick="window.location.href=\'../index.html\'">OK</button>';
+                echo ' </div>';
             }
             ?>
         </div>
     </div>
+
+
+
+
 
     <script>
         function buyproducts(key) {

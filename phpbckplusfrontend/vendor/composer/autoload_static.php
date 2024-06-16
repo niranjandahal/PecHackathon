@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8e10483faf5b47f1e079d0bf38617d3c
+class ComposerStaticInite58712331e790d6c56e939393ab84180
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -58,6 +58,16 @@ class ComposerStaticInit8e10483faf5b47f1e079d0bf38617d3c
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'E' => 
+        array (
+            'ElasticEmail' => 
+            array (
+                0 => __DIR__ . '/..' . '/elastic-email/web-api-client/src',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -65,9 +75,10 @@ class ComposerStaticInit8e10483faf5b47f1e079d0bf38617d3c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8e10483faf5b47f1e079d0bf38617d3c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8e10483faf5b47f1e079d0bf38617d3c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8e10483faf5b47f1e079d0bf38617d3c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite58712331e790d6c56e939393ab84180::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite58712331e790d6c56e939393ab84180::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInite58712331e790d6c56e939393ab84180::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInite58712331e790d6c56e939393ab84180::$classMap;
 
         }, null, ClassLoader::class);
     }
