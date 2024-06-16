@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $adminname = mysqli_escape_string($conn, $_POST['name']);
     $adminpassword = mysqli_escape_string($conn, $_POST['password']);
 
-    if ($adminname != "admin" || $adminpassword != "admin") {
+    if ($adminname != "niranjandahal" || $adminpassword != "123") {
         echo "<script>alert('Invalid Credentials')</script>";
         echo "<script>window.location.href='index.php'</script>";
         exit();
