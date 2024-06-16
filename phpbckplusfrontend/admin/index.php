@@ -14,18 +14,32 @@ if (isset($_SESSION['adminname']) && isset($_SESSION['adminpassword'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $adminname = mysqli_escape_string($conn, $_POST['name']);
-    $adminpassword = mysqli_escape_string($conn, $_POST['password']);
+    if (isset($_POST['nea_login']) && $_POST['nea_login'] == '1') {
+        // NEAS login handling
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
-    if ($adminname != "niranjandahal" || $adminpassword != "123") {
-        echo "<script>alert('Invalid Credentials')</script>";
-        echo "<script>window.location.href='index.php'</script>";
+        if ($username === 'neaofficial' && $password === '123') {
+            echo "<script>alert('NEA Login successful!')</script>";
+            header("location: neapannel.php");
+        } else {
+            echo "<script>alert('Invalid NEA Credentials')</script>";
+        }
+    } else {
+        // Admin login handling
+        $adminname = mysqli_escape_string($conn, $_POST['name']);
+        $adminpassword = mysqli_escape_string($conn, $_POST['password']);
+
+        if ($adminname != "niranjandahal" || $adminpassword != "123") {
+            echo "<script>alert('Invalid Credentials')</script>";
+            echo "<script>window.location.href='index.php'</script>";
+            exit();
+        }
+        $_SESSION['adminname'] = $adminname;
+        $_SESSION['adminpassword'] = $adminpassword;
+        header("location: adminpanel.php");
         exit();
     }
-    $_SESSION['adminname'] = $adminname;
-    $_SESSION['adminpassword'] = $adminpassword;
-    header("location: adminpanel.php");
-    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -34,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Admin & NEA Login</title>
     <link href="../dist/output.css" rel="stylesheet">
     <style>
         body {
@@ -48,6 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .login-container {
             padding: 2rem;
             background-color: #ffffff;
             border-radius: 10px;
@@ -104,24 +123,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="container">
-        <form action="index.php" method="POST">
-            <img class="logo" src="../logo.jpg" alt="Logo">
-            <div class="form-header">
-                <h1 class="text-2xl font-semibold text-gray-800">Admin Login</h1>
-            </div>
-
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Email address" name="name" id="name" required>
-            </div>
-
-            <div class="form-group">
-                <input type="password" class="form-input" placeholder="Password" name="password" id="password" required>
-            </div>
-
-            <div class="form-group">
-                <button class="form-button" type="submit">Login</button>
-            </div>
-        </form>
+        <div class="login-container">
+            <form action="index.php" method="POST">
+                <img class="logo" src="../logo.jpg" alt="Logo">
+                <div class="form-header">
+                    <h1 class="text-2xl font-semibold text-gray-800">Admin Login</h1>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Email address" name="name" id="name" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Password" name="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <button class="form-button" type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+        <div class="login-container">
+            <form action="index.php" method="POST">
+                <input type="hidden" name="nea_login" value="1">
+                <img class="logo" src="../logo.jpg" alt="Logo">
+                <div class="form-header">
+                    <h1 class="text-2xl font-semibold text-gray-800">NEA Login Portal</h1>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Username" name="username" id="username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Password" name="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <button class="form-button" type="submit">Login</button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 
